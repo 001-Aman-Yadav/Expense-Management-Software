@@ -6,7 +6,7 @@ import { PieChart, Pie, Cell, Tooltip as RechartsTooltip, ResponsiveContainer } 
 export default function Dashboard() {
   const [stats, setStats] = useState(null);
   const [transactions, setTransactions] = useState([]);
-  const [filter, setFilter] = useState('thisMonth');
+  const [filter, setFilter] = useState('today');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -154,7 +154,12 @@ export default function Dashboard() {
                     {getTransactionIcon(tx.type)}
                   </div>
                   <div>
-                    <p className="font-bold text-slate-900">{tx.description}</p>
+                    <p className="font-bold text-slate-900 flex items-center gap-2">
+                      {tx.description}
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${tx.paymentMethod === 'ONLINE' ? 'bg-blue-100 text-blue-700' : 'bg-orange-100 text-orange-700'}`}>
+                        {tx.paymentMethod === 'ONLINE' ? 'Online' : 'Cash'}
+                      </span>
+                    </p>
                     <p className="text-sm font-semibold text-slate-600">{new Date(tx.date).toLocaleDateString()}</p>
                   </div>
                 </div>

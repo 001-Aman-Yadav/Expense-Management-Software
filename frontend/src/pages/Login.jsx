@@ -5,8 +5,8 @@ import api from '../services/api';
 
 export default function Login() {
   const [formData, setFormData] = useState({
-    email: 'admin@gmail.com',
-    password: 'admin'
+    email: '',
+    password: ''
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);

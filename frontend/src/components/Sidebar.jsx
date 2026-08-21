@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
-import { LayoutDashboard, TrendingUp, Receipt, LogOut, Wallet } from 'lucide-react';
+import { LayoutDashboard, TrendingUp, Receipt, LogOut, Wallet, Settings as SettingsIcon } from 'lucide-react';
 
 export default function Sidebar() {
   const navigate = useNavigate();
@@ -14,6 +14,7 @@ export default function Sidebar() {
         { name: 'Dashboard', icon: <LayoutDashboard size={20} />, path: '/dashboard' },
         { name: 'Income', icon: <TrendingUp size={20} />, path: '/income' },
         { name: 'Expenses', icon: <Receipt size={20} />, path: '/expenses' },
+        { name: 'Settings', icon: <SettingsIcon size={20} />, path: '/settings' },
       ]
     }
   ];

@@ -15,7 +15,7 @@ exports.getTransactions = async (req, res) => {
 
 exports.createTransaction = async (req, res) => {
   try {
-    let { type, amount, date, description, accountId, categoryId, sourceAccountId, destinationAccountId, notes } = req.body;
+    let { type, amount, date, description, accountId, categoryId, sourceAccountId, destinationAccountId, notes, paymentMethod } = req.body;
     
     // Auto-assign default account if missing
     if (!accountId) {
@@ -52,7 +52,8 @@ exports.createTransaction = async (req, res) => {
           categoryId,
           sourceAccountId,
           destinationAccountId,
-          notes
+          notes,
+          paymentMethod: paymentMethod || 'CASH'
         }
       });
 

@@ -3,7 +3,7 @@ const prisma = require('../prismaClient');
 exports.getDashboardStats = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { filter = 'thisMonth' } = req.query;
+    const { filter = 'today' } = req.query;
 
     // Get all accounts to calculate total balance
     const accounts = await prisma.account.findMany({ where: { userId } });

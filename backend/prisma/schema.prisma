@@ -84,6 +84,7 @@ model Transaction {
   date        DateTime
   description String
   notes       String?
+  paymentMethod String      @default("CASH") // CASH, ONLINE
   status      String          @default("COMPLETED") // COMPLETED, PENDING
   
   // Relations

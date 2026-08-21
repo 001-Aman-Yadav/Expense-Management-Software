@@ -4,6 +4,7 @@ import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Income from './pages/Income';
 import Expenses from './pages/Expenses';
+import Settings from './pages/Settings';
 import Layout from './components/Layout';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
           <Route path="/dashboard" element={<Layout><Dashboard /></Layout>} />
           <Route path="/income" element={<Layout><Income /></Layout>} />
           <Route path="/expenses" element={<Layout><Expenses /></Layout>} />
+          <Route path="/settings" element={<Layout><Settings /></Layout>} />
         </Routes>
       </div>
     </BrowserRouter>

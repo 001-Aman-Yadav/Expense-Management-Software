@@ -4,7 +4,7 @@ import { Plus, Edit2, Trash2, Search, ArrowUpRight } from 'lucide-react';
 
 export default function Expenses() {
   const [transactions, setTransactions] = useState([]);
-  const [formData, setFormData] = useState({ amount: '', description: '', date: new Date().toISOString().split('T')[0], type: 'EXPENSE' });
+  const [formData, setFormData] = useState({ amount: '', description: '', date: new Date().toISOString().split('T')[0], type: 'EXPENSE', paymentMethod: 'ONLINE' });
   const [editingId, setEditingId] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -40,7 +40,7 @@ export default function Expenses() {
           headers: { Authorization: `Bearer ${token}` }
         });
       }
-      setFormData({ amount: '', description: '', date: new Date().toISOString().split('T')[0], type: 'EXPENSE' });
+      setFormData({ amount: '', description: '', date: new Date().toISOString().split('T')[0], type: 'EXPENSE', paymentMethod: 'ONLINE' });
       setEditingId(null);
       setShowForm(false);
       fetchTransactions();
@@ -50,7 +50,7 @@ export default function Expenses() {
   };
 
   const handleEdit = (tx) => {
-    setFormData({ amount: tx.amount, description: tx.description, date: new Date(tx.date).toISOString().split('T')[0], type: 'EXPENSE' });
+    setFormData({ amount: tx.amount, description: tx.description, date: new Date(tx.date).toISOString().split('T')[0], type: 'EXPENSE', paymentMethod: tx.paymentMethod || 'CASH' });
     setEditingId(tx.id);
     setShowForm(true);
   };
@@ -117,7 +117,14 @@ export default function Expenses() {
               <label className="block text-sm font-medium text-slate-700 mb-1">Date</label>
               <input type="date" required value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} className="w-full px-4 py-2 border rounded-lg" />
             </div>
-            <div className="md:col-span-3 flex justify-end">
+            <div className="md:col-span-1">
+              <label className="block text-sm font-medium text-slate-700 mb-1">Payment Mode</label>
+              <select value={formData.paymentMethod} onChange={e => setFormData({...formData, paymentMethod: e.target.value})} className="w-full px-4 py-2 border rounded-lg bg-white">
+                <option value="ONLINE">Online (Bank/UPI)</option>
+                <option value="CASH">Cash</option>
+              </select>
+            </div>
+            <div className="md:col-span-2 flex justify-end items-end">
               <button type="submit" className="bg-indigo-600 text-white px-8 py-2 rounded-lg font-medium hover:bg-indigo-700">Save Expense</button>
             </div>
           </form>
@@ -141,13 +148,14 @@ export default function Expenses() {
             <tr className="bg-slate-100 border-b border-slate-300 text-sm font-bold text-slate-700 uppercase tracking-wider">
               <th className="p-4">Date</th>
               <th className="p-4">Description</th>
+              <th className="p-4">Mode</th>
               <th className="p-4">Amount</th>
               <th className="p-4 text-right">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-200">
             {transactions.length === 0 && (
-              <tr><td colSpan="4" className="p-4 text-center text-slate-600 font-medium">No expense records found</td></tr>
+              <tr><td colSpan="5" className="p-4 text-center text-slate-600 font-medium">No expense records found</td></tr>
             )}
             {transactions.map(tx => (
               <tr key={tx.id} className="hover:bg-slate-100 transition-colors group">
@@ -159,6 +167,11 @@ export default function Expenses() {
                     </div>
                     {tx.description}
                   </div>
+                </td>
+                <td className="p-4 text-sm">
+                  <span className={`px-2 py-1 rounded text-xs font-bold ${tx.paymentMethod === 'ONLINE' ? 'bg-blue-100 text-blue-700' : 'bg-orange-100 text-orange-700'}`}>
+                    {tx.paymentMethod === 'ONLINE' ? 'Online' : 'Cash'}
+                  </span>
                 </td>
                 <td className="p-4 text-sm font-extrabold text-rose-600">
                   -₹{Number(tx.amount).toLocaleString()}
