@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import api from '../services/api';
 import { Camera, User, Lock, Mail, Save } from 'lucide-react';
 
 export default function Settings() {
@@ -22,9 +22,7 @@ export default function Settings() {
   const fetchProfile = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get('http://localhost:5000/api/auth/me', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await api.get('/auth/me');
       setUser(res.data);
       setFormData(prev => ({ ...prev, email: res.data.email }));
       localStorage.setItem('user', JSON.stringify(res.data));
@@ -47,9 +45,8 @@ export default function Settings() {
       try {
         const base64String = reader.result;
         const token = localStorage.getItem('token');
-        const res = await axios.post('http://localhost:5000/api/auth/photo', 
-          { profilePicture: base64String },
-          { headers: { Authorization: `Bearer ${token}` } }
+        const res = await api.post('/auth/photo', 
+          { profilePicture: base64String }
         );
         setUser(res.data);
         localStorage.setItem('user', JSON.stringify(res.data));
@@ -77,12 +74,10 @@ export default function Settings() {
 
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.put('http://localhost:5000/api/auth/profile', {
+      const res = await api.put('/auth/profile', {
         email: formData.email,
         currentPassword: formData.currentPassword,
         newPassword: formData.newPassword
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
       });
 
       setUser(res.data);

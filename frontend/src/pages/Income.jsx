@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../services/api';
 import { Plus, Edit2, Trash2, Search, ArrowDownRight } from 'lucide-react';
 
 export default function Income() {
@@ -16,9 +16,7 @@ export default function Income() {
   const fetchTransactions = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get('http://localhost:5000/api/transactions', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await api.get('/transactions');
       setTransactions(res.data.filter(tx => tx.type === 'INCOME'));
     } catch (error) {
       console.error('Error fetching transactions:', error);
@@ -32,13 +30,9 @@ export default function Income() {
     try {
       const token = localStorage.getItem('token');
       if (editingId) {
-        await axios.put(`http://localhost:5000/api/transactions/${editingId}`, formData, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        await api.put(`/transactions/${editingId}`, formData);
       } else {
-        await axios.post('http://localhost:5000/api/transactions', formData, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        await api.post('/transactions', formData);
       }
       setFormData({ amount: '', description: '', date: new Date().toISOString().split('T')[0], type: 'INCOME', paymentMethod: 'ONLINE' });
       setEditingId(null);
@@ -59,9 +53,7 @@ export default function Income() {
     if (window.confirm('Are you sure you want to delete this income entry?')) {
       try {
         const token = localStorage.getItem('token');
-        await axios.delete(`http://localhost:5000/api/transactions/${id}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        await api.delete(`/transactions/${id}`);
         fetchTransactions();
       } catch (error) {
         console.error('Error deleting transaction:', error);

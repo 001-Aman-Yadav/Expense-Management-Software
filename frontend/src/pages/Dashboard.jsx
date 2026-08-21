@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../services/api';
 import { ArrowUpRight, ArrowDownRight, Wallet } from 'lucide-react';
 import { PieChart, Pie, Cell, Tooltip as RechartsTooltip, ResponsiveContainer } from 'recharts';
 
@@ -18,12 +18,8 @@ export default function Dashboard() {
       if (!stats) setLoading(true);
       const token = localStorage.getItem('token');
       const [statsRes, txRes] = await Promise.all([
-        axios.get(`http://localhost:5000/api/analytics/dashboard?filter=${filter}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        }),
-        axios.get('http://localhost:5000/api/transactions', {
-          headers: { Authorization: `Bearer ${token}` }
-        })
+        api.get(`/analytics/dashboard?filter=${filter}`),
+        api.get('/transactions')
       ]);
       setStats(statsRes.data);
       setTransactions(txRes.data); // Show all transactions

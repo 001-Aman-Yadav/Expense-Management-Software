@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../services/api';
 import { Plus, Edit2, Trash2, Search, ArrowUpRight } from 'lucide-react';
 
 export default function Expenses() {
@@ -16,9 +16,7 @@ export default function Expenses() {
   const fetchTransactions = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get('http://localhost:5000/api/transactions', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await api.get('/transactions');
       setTransactions(res.data.filter(tx => tx.type === 'EXPENSE'));
     } catch (error) {
       console.error('Error fetching transactions:', error);
@@ -32,13 +30,9 @@ export default function Expenses() {
     try {
       const token = localStorage.getItem('token');
       if (editingId) {
-        await axios.put(`http://localhost:5000/api/transactions/${editingId}`, formData, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        await api.put(`/transactions/${editingId}`, formData);
       } else {
-        await axios.post('http://localhost:5000/api/transactions', formData, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        await api.post('/transactions', formData);
       }
       setFormData({ amount: '', description: '', date: new Date().toISOString().split('T')[0], type: 'EXPENSE', paymentMethod: 'ONLINE' });
       setEditingId(null);
@@ -59,9 +53,7 @@ export default function Expenses() {
     if (window.confirm('Are you sure you want to delete this expense entry?')) {
       try {
         const token = localStorage.getItem('token');
-        await axios.delete(`http://localhost:5000/api/transactions/${id}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        await api.delete(`/transactions/${id}`);
         fetchTransactions();
       } catch (error) {
         console.error('Error deleting transaction:', error);
