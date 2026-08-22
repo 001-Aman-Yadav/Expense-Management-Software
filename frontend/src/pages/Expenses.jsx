@@ -8,6 +8,7 @@ export default function Expenses() {
   const [editingId, setEditingId] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     fetchTransactions();
@@ -63,11 +64,17 @@ export default function Expenses() {
 
   const totalExpense = transactions.reduce((acc, tx) => acc + Number(tx.amount), 0);
 
+  const filteredTransactions = transactions.filter(tx => {
+    const searchLower = searchTerm.toLowerCase();
+    const dateStr = new Date(tx.createdAt || tx.date).toLocaleString('en-IN', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }).toLowerCase();
+    return tx.description.toLowerCase().includes(searchLower) || dateStr.includes(searchLower);
+  });
+
   if (loading) return <div className="p-8 text-center text-slate-500">Loading expense data...</div>;
 
   return (
-    <div className="p-8">
-      <div className="flex justify-between items-center mb-8">
+    <div className="p-4 md:p-8 max-w-full">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 md:mb-8">
         <div>
           <h1 className="text-3xl font-bold text-slate-900">Expenses</h1>
           <p className="text-slate-500 mt-1">Add and track your daily expenses</p>
@@ -130,12 +137,15 @@ export default function Expenses() {
             <input 
               type="text" 
               placeholder="Search expenses..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10 pr-4 py-2 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500 w-64 text-sm"
             />
           </div>
         </div>
         
-        <table className="w-full text-left border-collapse">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse min-w-[600px]">
           <thead>
             <tr className="bg-slate-100 border-b border-slate-300 text-sm font-bold text-slate-700 uppercase tracking-wider">
               <th className="p-4">Date</th>
@@ -146,10 +156,10 @@ export default function Expenses() {
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-200">
-            {transactions.length === 0 && (
+            {filteredTransactions.length === 0 && (
               <tr><td colSpan="5" className="p-4 text-center text-slate-600 font-medium">No expense records found</td></tr>
             )}
-            {transactions.map(tx => (
+            {filteredTransactions.map(tx => (
               <tr key={tx.id} className="hover:bg-slate-100 transition-colors group">
                 <td className="p-4 text-sm font-semibold text-slate-700">{new Date(tx.createdAt || tx.date).toLocaleString('en-IN', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}</td>
                 <td className="p-4 text-sm font-bold text-slate-900">
@@ -182,6 +192,7 @@ export default function Expenses() {
             ))}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );

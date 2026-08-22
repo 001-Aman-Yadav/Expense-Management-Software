@@ -94,7 +94,7 @@ export default function Settings() {
   };
 
   return (
-    <div className="p-8 max-w-4xl mx-auto">
+    <div className="p-4 md:p-8 max-w-4xl mx-auto">
       <h1 className="text-2xl font-bold text-slate-900 mb-8">Settings</h1>
 
       {message && <div className="mb-6 p-4 bg-emerald-50 text-emerald-600 rounded-lg font-medium">{message}</div>}

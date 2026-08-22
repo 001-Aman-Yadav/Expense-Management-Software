@@ -39,8 +39,8 @@ export default function Dashboard() {
   if (loading) return <div className="p-8 text-center text-slate-500">Loading dashboard...</div>;
 
   return (
-    <div className="p-8">
-      <div className="flex justify-between items-center mb-8">
+    <div className="p-4 md:p-8 max-w-full">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 md:mb-8">
         <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
         <div className="relative inline-block">
           <select 
