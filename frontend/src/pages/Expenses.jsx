@@ -151,7 +151,7 @@ export default function Expenses() {
             )}
             {transactions.map(tx => (
               <tr key={tx.id} className="hover:bg-slate-100 transition-colors group">
-                <td className="p-4 text-sm font-semibold text-slate-700">{new Date(tx.date).toLocaleDateString()}</td>
+                <td className="p-4 text-sm font-semibold text-slate-700">{new Date(tx.createdAt || tx.date).toLocaleString('en-IN', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}</td>
                 <td className="p-4 text-sm font-bold text-slate-900">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center">

@@ -91,7 +91,7 @@ exports.createTransaction = async (req, res) => {
 exports.updateTransaction = async (req, res) => {
   try {
     const { id } = req.params;
-    const { amount, date, description } = req.body;
+    const { amount, date, description, paymentMethod } = req.body;
     
     // Find existing transaction
     const existingTx = await prisma.transaction.findUnique({
@@ -111,7 +111,8 @@ exports.updateTransaction = async (req, res) => {
         data: {
           amount: Number(amount),
           date: new Date(date),
-          description
+          description,
+          paymentMethod: paymentMethod || existingTx.paymentMethod
         }
       });
 

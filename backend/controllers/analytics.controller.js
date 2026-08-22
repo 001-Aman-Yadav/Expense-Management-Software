@@ -4,6 +4,7 @@ exports.getDashboardStats = async (req, res) => {
   try {
     const userId = req.user.id;
     const { filter = 'today' } = req.query;
+    console.log(`[Dashboard] fetching stats for userId: ${userId}, filter: ${filter}`);
 
     // Get all accounts to calculate total balance
     const accounts = await prisma.account.findMany({ where: { userId } });

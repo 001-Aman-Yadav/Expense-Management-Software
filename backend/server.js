@@ -16,9 +16,17 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'API is running' });
 });
 
+const prisma = require('./prismaClient');
+
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`Server running on port ${PORT}`);
+  try {
+    await prisma.$connect();
+    console.log('✅ Successfully connected to Neon Database!');
+  } catch (error) {
+    console.error('❌ Failed to connect to Neon Database:', error);
+  }
 });
 
 module.exports = app;

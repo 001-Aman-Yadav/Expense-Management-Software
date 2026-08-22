@@ -64,8 +64,8 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-center justify-between">
           <div>
-            <p className="text-sm text-slate-500 font-medium">Total Balance</p>
-            <p className="text-2xl font-bold mt-1">₹{Number(stats?.totalBalance || 0).toLocaleString()}</p>
+            <p className={`text-sm font-medium ${(stats?.totalBalance || 0) < 0 ? 'text-rose-500' : (stats?.totalBalance || 0) > 0 ? 'text-emerald-500' : 'text-slate-500'}`}>Total Balance</p>
+            <p className={`text-2xl font-bold mt-1 ${(stats?.totalBalance || 0) < 0 ? 'text-rose-600' : (stats?.totalBalance || 0) > 0 ? 'text-emerald-600' : 'text-slate-900'}`}>₹{Number(stats?.totalBalance || 0).toLocaleString()}</p>
           </div>
           <div className="bg-indigo-100 p-3 rounded-lg text-indigo-600">
             <Wallet size={24} />
@@ -74,8 +74,8 @@ export default function Dashboard() {
         
         <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-center justify-between">
           <div>
-            <p className="text-slate-500 text-sm font-medium uppercase tracking-wider mb-1">Total Income</p>
-            <p className="text-2xl font-bold mt-1">₹{Number(stats?.periodIncome || 0).toLocaleString()}</p>
+            <p className="text-emerald-500 text-sm font-medium uppercase tracking-wider mb-1">Total Income</p>
+            <p className="text-2xl font-bold mt-1 text-emerald-600">₹{Number(stats?.periodIncome || 0).toLocaleString()}</p>
           </div>
           <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 shadow-inner">
             <ArrowDownRight size={24} />
@@ -84,8 +84,8 @@ export default function Dashboard() {
 
         <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-center justify-between">
           <div>
-            <p className="text-slate-500 text-sm font-medium uppercase tracking-wider mb-1">Total Expense</p>
-            <p className="text-2xl font-bold mt-1">₹{Number(stats?.periodExpense || 0).toLocaleString()}</p>
+            <p className="text-rose-500 text-sm font-medium uppercase tracking-wider mb-1">Total Expense</p>
+            <p className="text-2xl font-bold mt-1 text-rose-600">₹{Number(stats?.periodExpense || 0).toLocaleString()}</p>
           </div>
           <div className="w-12 h-12 bg-rose-100 rounded-full flex items-center justify-center text-rose-600 shadow-inner">
             <ArrowUpRight size={24} />
@@ -156,7 +156,16 @@ export default function Dashboard() {
                         {tx.paymentMethod === 'ONLINE' ? 'Online' : 'Cash'}
                       </span>
                     </p>
-                    <p className="text-sm font-semibold text-slate-600">{new Date(tx.date).toLocaleDateString()}</p>
+                    <p className="text-sm font-semibold text-slate-600">
+                      {new Date(tx.createdAt || tx.date).toLocaleString('en-IN', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: true
+                      })}
+                    </p>
                   </div>
                 </div>
                 <p className={`font-extrabold ${tx.type === 'INCOME' ? 'text-emerald-600' : tx.type === 'EXPENSE' ? 'text-rose-600' : 'text-slate-700'}`}>
